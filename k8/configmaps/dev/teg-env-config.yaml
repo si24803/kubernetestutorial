@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+        name: teg-env-config
+        namespace: teg-cis-dev
+data:
+        NODE_ENV: "development"
+        BUSINESS_REGION: "US"
+        LOG_LEVEL: "debug"
+        GDPR: "false"
+        ZOOKEEPER: "zookeeper1:2181"
+        MAPS_API_KEY: "rghiogherghieorghieor"
+        CIS_PUBLIC_URL: "https://52.178.188.23:8080/api/mobile/v1/"
+        TEG_SERVICE_REGISTRATOR: "http://service-registrator:4000"

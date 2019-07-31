@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cis-private-api
+  namespace: teg-cis-dev
+  annotations:
+    kubernetes.io/ingress.class: nginx    
+    #nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/whitelist-source-range: "127.0.0.1,10.204.0.0/24"  
+spec:
+  tls:
+  - hosts:
+    - 'tegmobile.raid.cloud'
+    secretName: teg-cis-dev-secret  
+  rules:
+  - host: 'tegmobile.raid.cloud'
+    http:      
+      paths:      
+      - path: /api/portal
+        backend:
+          serviceName: cis-message-proxy
+          servicePort: 3000
+      - path: /admin
+        backend:
+          serviceName: cis-message-proxy
+          servicePort: 3000
+      - path: /registrator/cis
+        backend:
+          serviceName: service-registrator
+          servicePort: 4000

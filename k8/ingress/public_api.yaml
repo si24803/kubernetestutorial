@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: cis-public-api
+  namespace: teg-cis-dev
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"    
+    #nginx.ingress.kubernetes.io/ssl-passthrough: "true"    
+spec:
+  tls:
+  - hosts:
+    - 'tegmobile.raid.cloud'
+    secretName: teg-cis-dev-secret  
+  rules:  
+  - host: 'tegmobile.raid.cloud'
+    http:
+      paths:
+        - path: /api/mobile
+          backend:
+            serviceName: cis-message-proxy
+            servicePort: 3000
+  - host: 'tegmobile.raid.cloud'
+    http:
+      paths:
+        - path: /registrator/mobile
+          backend: 
+            serviceName: service-registrator
+            servicePort: 4000

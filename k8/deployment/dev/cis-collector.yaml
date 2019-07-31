@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-collector
+  labels:
+    app: teg-cis
+    component: cis-collector
+  namespace: teg-cis-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-collector
+  template:
+    metadata:
+      labels:
+        app: teg-cis
+        component: cis-collector
+    spec:
+      containers:
+      - name: cis-collector 
+        image: localhost:32000/teg/cis-collector:latest-dev
+        ports:
+        - containerPort: 8010        
+        env:
+        - name: SERVICE_NAME
+          value: cis-collector
+        envFrom:
+          - configMapRef:
+              name: $(POD_NAMESPACE)/db-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/api-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config
+        livenessProbe:
+          httpHead: 
+            path: "/api/v1/Health"
+            port: 8010              
+            scheme: HTTP
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        
+       
+#              valueFrom:
+#                configMapKeyRef:
+#                  name: api-env-config
+#                  namespace: teg-cis-dev
+#                  key: CIS_COLLECTOR_PORT

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-test-generator
+  labels:
+    app: teg-cis
+    component: cis-test-generator
+  namespace: teg-cis-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-test-generator   
+  template:
+    metadata:
+      labels:
+        app: teg-cis
+        component: cis-test-generator                             
+    spec:
+      containers:
+      - name: cis-test-generator 
+        image: localhost:32000/teg/cis-test-generator:latest-dev
+        ports:
+        - containerPort: 8050        
+        env:
+        - name: SERVICE_NAME
+          value: cis-test-generator
+        envFrom:
+          - configMapRef:
+              name: $(POD_NAMESPACE)/db-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/api-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config

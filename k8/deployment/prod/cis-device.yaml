@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-device
+  labels:
+    app: teg-cis
+    component: cis-device
+  namespace: teg-cis-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-device
+  template:
+    metadata:
+      labels:
+        app: teg-cis
+        component: cis-device                             
+    spec:
+      containers:
+      - name: cis-device 
+        image: localhost:32000/teg/cis-device:latest-dev
+        ports:
+        - containerPort: 8020        
+        env:
+        - name: SERVICE_NAME
+          value: cis-device
+        envFrom:
+          - configMapRef:
+              name: $(POD_NAMESPACE)/db-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/api-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config

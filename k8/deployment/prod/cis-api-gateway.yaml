@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-api-gateway
+  labels:
+    app: teg-cis
+    component: cis-api-gateway
+  namespace: teg-cis-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-api-gateway
+  template:
+    metadata:
+      labels:
+        app: teg-cis
+        component: cis-api-gateway                           
+    spec:
+      containers:
+      - name: cis-api-gateway 
+        image: localhost:32000/teg/cis-api-gateway:latest-dev                                        
+        ports:
+        - containerPort: 8080 # server port (prod: containerPort: 8444)          
+          name: api
+        - containerPort: 8445 # status port (not open in dev)          
+          name: status          
+        env:
+        - name: SERVICE_NAME
+          value: cis-api-gateway
+        envFrom:          
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config              

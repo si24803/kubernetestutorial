@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+        name: cis-db-env-config
+        namespace: teg-cis-dev
+data:
+        DB_LOGGING: "all"
+        DB_HOST: "172.20.31.221"
+        DB_PORT: "5432"
+        DB_USER: "SAUS0DAT"
+        DB_PASSWORD: "SAUS0DAT"
+        DB_NAME: "postgres"
+        DB_SCHEMA: "SAUS0DAT"

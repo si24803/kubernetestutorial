@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cis-api-gateway
+  namespace: teg-cis-dev
+spec:  
+  selector:
+    app: teg-cis
+    component: cis-api-gateway
+  ports:
+  - protocol: TCP
+    name: api
+    port: 8080
+    #targetPort: 8444
+    #targetPort: 8080    
+  - protocol: TCP
+    name: status
+    port: 8445
+    #targetPort: 8445
+  type: ClusterIP

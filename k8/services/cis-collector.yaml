@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cis-collector
+  namespace: teg-cis-dev
+spec:
+  selector:
+    app: teg-cis
+    component: cis-collector
+  ports:
+  - protocol: TCP
+    port: 8010    
+    targetPort: 8010
+  type: ClusterIP
+    

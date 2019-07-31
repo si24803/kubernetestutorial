@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-message-proxy
+  labels:
+    app: teg-cis
+    component: cis-message-proxy
+  namespace: teg-cis-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-message-proxy
+  template:
+    metadata:
+      labels:
+        app: teg-cis
+        component: cis-message-proxy                           
+    spec:
+      containers:
+      - name: cis-message-proxy 
+        image: localhost:32000/teg/cis-message-proxy:latest-dev
+        ports:
+        - containerPort: 3000           
+        env:
+        - name: SERVICE_NAME
+          value: cis-message-proxy
+        envFrom:         
+          - configMapRef:
+              name: $(POD_NAMESPACE)/api-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config
+       
+
+
+       

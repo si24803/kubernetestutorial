@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cis-subscription
+  labels:
+    app: teg-cis
+    component: cis-subscription
+  namespace: teg-cis-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teg-cis
+      component: cis-subscription  
+  template:
+    metadata:
+      labels:        
+        app: teg-cis
+        component: cis-subscription                         
+    spec:
+      containers:
+      - name: cis-subscription 
+        image: localhost:32000/teg/cis-subscription:latest-dev
+        ports:
+        - containerPort: 8040        
+        env:
+        - name: SERVICE_NAME
+          value: cis-subscription
+        envFrom:
+          - configMapRef:
+              name: $(POD_NAMESPACE)/db-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/api-env-config
+          - configMapRef:
+              name: $(POD_NAMESPACE)/teg-env-config
